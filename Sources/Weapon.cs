@@ -6,6 +6,10 @@ namespace Napilnik.Sources
     {
         private readonly int _damage;
 
+        public int Bullets { get; private set; }
+
+        public bool CanFire => Bullets > 0;
+
         public Weapon(int damage, int bullets)
         {
             if (damage < 0)
@@ -17,15 +21,12 @@ namespace Napilnik.Sources
             _damage = damage;
             Bullets = bullets;
         }
-        
-        public int Bullets { get; private set; }
-        public bool CanFire => Bullets > 0;
-        
+
         public void Fire(IDamageable damageable)
         {
-            if(CanFire == false)
+            if (CanFire == false)
                 return;
-            
+
             damageable.ApplyDamage(_damage);
             Bullets -= 1;
         }

@@ -6,17 +6,17 @@ namespace Napilnik.Sources
     {
         private int _health;
 
+        public bool IsDead => _health <= 0;
+
         public Player(int health)
         {
             if (health < 0)
                 throw new ArgumentOutOfRangeException(nameof(health));
-            
+
             _health = health;
         }
-        
+
         public event Action Died;
-        
-        public bool IsDead => _health <= 0;
 
         public void ApplyDamage(int damage)
         {
@@ -24,12 +24,12 @@ namespace Napilnik.Sources
                 throw new ArgumentOutOfRangeException(nameof(damage));
 
             if (IsDead)
-            {
-                Died?.Invoke();
                 return;
-            }
 
             _health -= damage;
+
+            if (IsDead)
+                Died?.Invoke();
         }
     }
 }

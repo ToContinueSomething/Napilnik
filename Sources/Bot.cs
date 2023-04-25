@@ -15,16 +15,19 @@ namespace Napilnik.Sources
         }
 
         public event Action BulletsEnded;
-        
+
         public void OnSeePlayer(Player player)
         {
             if (player == null)
                 throw new ArgumentNullException(nameof(player));
 
-            if(_weapon.CanFire == false)
-                BulletsEnded?.Invoke();
-            
+            if (_weapon.CanFire == false)
+                return;
+
             _weapon.Fire(player);
+
+            if (_weapon.CanFire == false)
+                BulletsEnded?.Invoke();
         }
     }
 }
