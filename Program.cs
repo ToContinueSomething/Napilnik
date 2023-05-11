@@ -1,28 +1,23 @@
-﻿using System;
-using Napilnik.Sources;
+﻿using Napilnik.Sources;
 
 namespace Napilnik
 {
     internal class Program
     {
-        private static bool _isGameOver;
-
         public static void Main(string[] args)
         {
-            Player player = new Player(100);
-            player.Died += OnPlayerDied;
-            
-            Bot bot = new Bot(new Weapon(10, 5));
-            bot.BulletsEnded += OnBulletsEnded;
-            
-            while (_isGameOver == false)
-            {
-                bot.OnSeePlayer(player);
-            }
+            Pathfinder pathfinder = new Pathfinder(new FileLogWritter());
+            Pathfinder pathfinder2 = new Pathfinder(new ConsoleLogWritter());
+            Pathfinder pathfinder3 = new Pathfinder(new SecureConsoleLogWritter(new FileLogWritter()));
+            Pathfinder pathfinder4 = new Pathfinder(new SecureConsoleLogWritter(new ConsoleLogWritter()));
+            Pathfinder pathfinder5 = new Pathfinder(new ChainOfLogWritter(new ILogger[] { new ConsoleLogWritter(),
+                new SecureConsoleLogWritter(new FileLogWritter()) }));
+
+            pathfinder.Find("@");
+            pathfinder2.Find("#");
+            pathfinder3.Find("$");
+            pathfinder4.Find("()");
+            pathfinder5.Find("&");
         }
-
-        private static void OnBulletsEnded() => _isGameOver = true;
-
-        private static void OnPlayerDied() => _isGameOver = true;
     }
 }
